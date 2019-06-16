@@ -24,8 +24,6 @@ public class Receive {
         }else{
             System.out.println("队列test接收到消息："+message);
         }
-        }
-        System.out.println("队列test接收到消息："+message);
         System.out.println("这是第几次极少到消息");
     }
 
