@@ -21,8 +21,9 @@ public class Receive {
     public void showMessage(String message){
         if (ObjectUtils.isEmpty(message)){
             System.out.println(message+"是空的");
+        }else{
+            System.out.println("队列test接收到消息："+message);
         }
-        System.out.println("队列test接收到消息："+message);
     }
 
 
