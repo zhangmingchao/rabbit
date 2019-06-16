@@ -48,25 +48,30 @@ public class RabbitDemo {
         rabbitTemplate.convertAndSend("topictest","findAll.user","多个人后天要上班");
     }
 
-    @Autowired
-    private FanoutExchange fanout;
+//    @Autowired
+//    private FanoutExchange fanout;
+//
+//    AtomicInteger dots = new AtomicInteger(0);
+//
+//    AtomicInteger count = new AtomicInteger(0);
 
-    AtomicInteger dots = new AtomicInteger(0);
+//    @Scheduled(fixedDelay = 1000, initialDelay = 500)
+//    public void send() {
+//        StringBuilder builder = new StringBuilder("Hello");
+//        if (dots.getAndIncrement() == 3) {
+//            dots.set(1);
+//        }
+//        for (int i = 0; i < dots.get(); i++) {
+//            builder.append('.');
+//        }
+//        builder.append(count.incrementAndGet());
+//        String message = builder.toString();
+//        rabbitTemplate.convertAndSend(fanout.getName(), "", message);
+//        System.out.println(" [x] Sent '" + message + "'");
+//    }
 
-    AtomicInteger count = new AtomicInteger(0);
-
-    @Scheduled(fixedDelay = 1000, initialDelay = 500)
-    public void send() {
-        StringBuilder builder = new StringBuilder("Hello");
-        if (dots.getAndIncrement() == 3) {
-            dots.set(1);
-        }
-        for (int i = 0; i < dots.get(); i++) {
-            builder.append('.');
-        }
-        builder.append(count.incrementAndGet());
-        String message = builder.toString();
-        rabbitTemplate.convertAndSend(fanout.getName(), "", message);
-        System.out.println(" [x] Sent '" + message + "'");
+    @Test
+    public void test1(){
+        rabbitTemplate.convertAndSend("test","生产者发送消息");
     }
 }
