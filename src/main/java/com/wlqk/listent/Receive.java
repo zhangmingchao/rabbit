@@ -23,6 +23,7 @@ public class Receive {
             System.out.println(message+"是空的");
         }
         System.out.println("队列test接收到消息："+message);
+        System.out.println("这是第几次极少到消息");
     }
 
 
