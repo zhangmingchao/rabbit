@@ -73,6 +73,7 @@ public class RabbitDemo {
     @Test
     public void test1(){
         String msg = "生产出消息";
+        System.out.println("生产出消息");
         rabbitTemplate.convertAndSend("test",msg);
     }
 }
