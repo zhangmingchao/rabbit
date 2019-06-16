@@ -1,0 +1,13 @@
+###################  项目启动端口  ###################
+server:
+  port: 8087
+###################  spring配置  ###################
+spring:
+  aop:
+    proxy-target-class: true #false为启用jdk默认动态代理,true为cglib动态代理
+  cache:
+    type: ehcache #缓存
+  session:
+    store-type: none
+  rabbitmq:
+    host: localhost
