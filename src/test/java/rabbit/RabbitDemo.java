@@ -76,4 +76,9 @@ public class RabbitDemo {
         System.out.println("生产出消息");
         rabbitTemplate.convertAndSend("test",msg);
     }
+
+    @Test
+    public void test2(){
+        rabbitTemplate.convertAndSend("topic","","123456");
+    }
 }
