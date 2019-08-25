@@ -1,9 +1,11 @@
 package rabbit;
 
 import com.PersonalDataApplication;
+import com.wlqk.config.RabbitUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.amqp.core.FanoutExchange;
+import org.springframework.amqp.rabbit.connection.RabbitUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -80,5 +82,18 @@ public class RabbitDemo {
     @Test
     public void test2(){
         rabbitTemplate.convertAndSend("topic","","123456");
+    }
+
+    @Autowired
+    private RabbitUtil rabbitUtil;
+
+    @Test
+    public void test111(){
+        rabbitTemplate.convertAndSend("topic","user","123456");
+        rabbitTemplate.convertAndSend("topic","user","111111");
+        rabbitTemplate.convertAndSend("topic","user","222222");
+        rabbitTemplate.convertAndSend("topic","user","333333");
+        rabbitTemplate.convertAndSend("topic","user","444444");
+        rabbitTemplate.convertAndSend("topic","user","555555");
     }
 }
