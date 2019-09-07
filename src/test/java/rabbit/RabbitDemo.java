@@ -19,6 +19,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -98,16 +102,26 @@ public class RabbitDemo {
     private ObjectMapper objectMapper;
 
     @Test
-    public void test111() throws JsonProcessingException {
-        Student student = new Student();
-        student.setName("张三");
-        student.setSex("男");
-        String orderJson = objectMapper.writeValueAsString(student);
-        Message message = MessageBuilder
-                .withBody(orderJson.getBytes())
-                .setContentType(MessageProperties.CONTENT_TYPE_JSON)
-                .build();
-        System.out.println(orderJson);
-        rabbitTemplate.convertAndSend("hello",student);
+    public void test111() throws JsonProcessingException, InterruptedException {
+        List<Map<String,Object>> list = new ArrayList<Map<String, Object>>();
+        for (int i = 0; i < 30; i++) {
+            Student student = new Student();
+            student.setName("张三");
+            student.setSex("男");
+            Map<String,Object> map = new HashMap<String, Object>();
+            map.put("name","张三");
+            map.put("sex","男");
+            map.put("code","1");
+            map.put("isSuccess","1");
+            map.put("address","山东菏泽");
+            map.put("host","135986815367");
+            map.put("status","1");
+            list.add(map);
+        }
+        rabbitTemplate.convertAndSend("hello",list);
+        Thread.sleep(5000);
+        rabbitTemplate.convertAndSend("hello",list);
+
+        rabbitTemplate.convertAndSend("hello",list);
     }
 }
