@@ -1,10 +1,17 @@
 package rabbit;
 
 import com.PersonalDataApplication;
+import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wlqk.config.RabbitUtil;
+import com.wlqk.model.Student;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.amqp.core.FanoutExchange;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageBuilder;
+import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.connection.RabbitUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,13 +94,20 @@ public class RabbitDemo {
     @Autowired
     private RabbitUtil rabbitUtil;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Test
-    public void test111(){
-        rabbitTemplate.convertAndSend("topic","user","123456");
-        rabbitTemplate.convertAndSend("topic","user","111111");
-        rabbitTemplate.convertAndSend("topic","user","222222");
-        rabbitTemplate.convertAndSend("topic","user","333333");
-        rabbitTemplate.convertAndSend("topic","user","444444");
-        rabbitTemplate.convertAndSend("topic","user","555555");
+    public void test111() throws JsonProcessingException {
+        Student student = new Student();
+        student.setName("张三");
+        student.setSex("男");
+        String orderJson = objectMapper.writeValueAsString(student);
+        Message message = MessageBuilder
+                .withBody(orderJson.getBytes())
+                .setContentType(MessageProperties.CONTENT_TYPE_JSON)
+                .build();
+        System.out.println(orderJson);
+        rabbitTemplate.convertAndSend("hello",student);
     }
 }
