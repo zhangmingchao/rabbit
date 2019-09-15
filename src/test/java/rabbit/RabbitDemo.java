@@ -1,16 +1,35 @@
 package rabbit;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.PersonalDataApplication;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.wlqk.listent.HttpKit;
+import com.wlqk.listent.RestUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.amqp.core.FanoutExchange;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.connection.RabbitAccessor;
+import org.springframework.amqp.rabbit.connection.RabbitResourceHolder;
+import org.springframework.amqp.rabbit.connection.RabbitUtils;
+import org.springframework.amqp.rabbit.core.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.util.MultiValueMap;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * @author zc
@@ -70,10 +89,28 @@ public class RabbitDemo {
 //        System.out.println(" [x] Sent '" + message + "'");
 //    }
 
+    @Autowired
+    private RabbitAdmin rabbitAdmin;
+
+    @Autowired
+    private RabbitProperties rabbitProperties;
+
     @Test
     public void test1(){
-        String msg = "生产出消息";
-        System.out.println("生产出消息");
-        rabbitTemplate.convertAndSend("test",msg);
+        String get = null;
+        try {
+            get = HttpKit.Get("http://127.0.0.1:15672/api/exchanges/%2F/topic/bindings/source", "guest", "guest");
+            List<Map> list = JSON.parseArray(get,Map.class);
+            //获取符合路由的map集合
+            List<Map> routingKey = list.stream().filter((map -> "a".equals(map.get("routing_key").toString()))).collect(Collectors.toList());
+            //获取队列名字
+            List<String> stringList = routingKey.stream().map(map -> map.get("destination").toString()).collect(Collectors.toList());
+            for (String s : stringList) {
+                System.out.println("队列名字是："+s);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println(get);
     }
 }
